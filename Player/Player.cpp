@@ -5,7 +5,7 @@ using namespace sf;
 //Private Methods
 void Player::init_hitbox()
 {
-    this->hitbox.setSize(Vector2f(25.f, 25.f));
+    this->hitbox.setSize(Vector2f(this->size, this->size));
     this->hitbox.setFillColor(Color::Blue);
 }
 
@@ -13,6 +13,7 @@ void Player::init_hitbox()
 Player::Player()
 {
     this->movementSpeed = 3.f;
+    this->size = 25.f;
 
     this->init_hitbox();
 }
@@ -20,6 +21,23 @@ Player::Player()
 Player::~Player()
 {
 
+}
+
+//Accessors
+
+const float Player::getX() const
+{
+    return this->hitbox.getPosition().x;
+}
+
+const float Player::getY() const
+{
+    return this->hitbox.getPosition().y;
+}
+
+const float Player::getSize() const
+{
+    return this->size;
 }
 
 //Methods

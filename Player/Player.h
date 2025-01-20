@@ -14,6 +14,7 @@ private:
     //Attributes
     RectangleShape hitbox;
     float movementSpeed;
+    float size;
 
     //Private Methods
     void init_hitbox();
@@ -25,7 +26,9 @@ public:
 
     //Accessors
 
-
+    const float getX() const;
+    const float getY() const;
+    const float getSize() const;
 
     //Methods
     void move(const float dirX, const float dirY);

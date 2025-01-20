@@ -66,7 +66,14 @@ void Game::poll_events()
 
 void Game::move_player()
 {
-
+    if(Keyboard::isKeyPressed(Keyboard::Key::A) && this->player->getX() > 0)
+        this->player->move(-1.f, 0.f);
+    if(Keyboard::isKeyPressed(Keyboard::Key::D) && this->player->getX() < (this->window->getSize().x - this->player->getSize())) 
+        this->player->move(1.f, 0.f);
+    if(Keyboard::isKeyPressed(Keyboard::Key::W) && this->player->getY() > 0)
+        this->player->move(0.f, -1.f);
+    if(Keyboard::isKeyPressed(Keyboard::Key::S) && this->player->getY() < (this->window->getSize().y - this->player->getSize()))
+        this->player->move(0.f, 1.f);
 }
 
 void Game::update()
@@ -74,14 +81,7 @@ void Game::update()
     this->poll_events();
 
     //Move player
-    if(Keyboard::isKeyPressed(Keyboard::Key::A))
-        this->player->move(-1.f, 0.f);
-    if(Keyboard::isKeyPressed(Keyboard::Key::D))
-        this->player->move(1.f, 0.f);
-    if(Keyboard::isKeyPressed(Keyboard::Key::W))
-        this->player->move(0.f, -1.f);
-    if(Keyboard::isKeyPressed(Keyboard::Key::S))
-        this->player->move(0.f, 1.f);
+    this->move_player();
 }
 
 void Game::render()
