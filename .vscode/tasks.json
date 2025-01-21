@@ -10,6 +10,7 @@
                 "${workspaceFolder}/*.cpp",
                 "${workspaceFolder}/Game/*.cpp",
                 "${workspaceFolder}/Player/*.cpp",
+                "${workspaceFolder}/Bullet/*.cpp",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}",
                 "-iquote${workspaceFolder}/headers",

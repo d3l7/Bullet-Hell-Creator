@@ -17,6 +17,7 @@ private:
     float size;
 
     //Private Methods
+    void init_attributes();
     void init_hitbox();
 
 public:

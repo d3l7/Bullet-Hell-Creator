@@ -2,9 +2,16 @@
 
 using namespace sf;
 
-//Private Methods
+// Private Methods
+void Player::init_attributes()
+{
+    this->movementSpeed = 3.f;
+    this->size = 25.f;
+}
+
 void Player::init_hitbox()
 {
+    this->hitbox.setPosition(640.f, 360.f);  //Testing bullet interaction
     this->hitbox.setSize(Vector2f(this->size, this->size));
     this->hitbox.setFillColor(Color::Blue);
 }
@@ -12,9 +19,7 @@ void Player::init_hitbox()
 // Constructors / Destructors
 Player::Player()
 {
-    this->movementSpeed = 3.f;
-    this->size = 25.f;
-
+    this->init_attributes();
     this->init_hitbox();
 }
 

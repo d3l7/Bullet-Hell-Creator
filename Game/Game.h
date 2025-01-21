@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Player/Player.h"
+#include "../Bullet/Bullet.h"
 
 using namespace sf;
 
@@ -15,15 +16,23 @@ class Game
 {
 private:
     //Attributes
+
+    //Window
     RenderWindow* window;
     VideoMode resolution;
     Event ev;
+
+    //Bullet
+    Bullet* bullet;
+
+    //Player
     Player* player;  
 
     //Private Methods
     void init_attributes();
     void init_window();
     void init_player();
+    void init_bullet();
 
 public:
     //Constructors / Destructors
@@ -38,6 +47,9 @@ public:
     void poll_events();
     
     void move_player();
+
+    void update_player();
+    void update_bullets();
 
     void update();
     void render();

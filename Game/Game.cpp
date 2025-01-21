@@ -23,18 +23,27 @@ void Game::init_player()  //Ffs
     this->player = new Player();
 }
 
+//Temp
+
+void Game::init_bullet()
+{
+    this->bullet = new Bullet();
+}
+
 //Constructors / Destructors
 Game::Game()
 {
     this->init_attributes();
     this->init_window();
     this->init_player();
+    this->init_bullet();
 }
 
 Game::~Game()
 {
     delete this->window;
     delete this->player;
+    delete this->bullet;
 }
 
 //Accessors
@@ -76,12 +85,23 @@ void Game::move_player()
         this->player->move(0.f, 1.f);
 }
 
+void Game::update_player()
+{
+    //General update method to ensure correct order of method calling 
+    this->move_player();
+}
+
+void Game::update_bullets()
+{
+    this->bullet->move(1.f, 0.f);
+}
+
 void Game::update()
 {
     this->poll_events();
 
-    //Move player
-    this->move_player();
+    this->update_player();
+    this->update_bullets();
 }
 
 void Game::render()
@@ -90,6 +110,7 @@ void Game::render()
 
     //Draw new frame with game objects
     this->player->render(*this->window);
+    this->bullet->render(*this->window);
 
     this->window->display();
 
