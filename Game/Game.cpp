@@ -23,11 +23,12 @@ void Game::init_player()  //Ffs
     this->player = new Player();
 }
 
-//Temp
 
+//Temp
 void Game::init_bullet()
 {
-    this->bullet = new Bullet();
+   this->bullet = new Bullet(1.f, 0.f, 2.5f);
+   this->spawn_bullet();
 }
 
 //Constructors / Destructors
@@ -43,7 +44,12 @@ Game::~Game()
 {
     delete this->window;
     delete this->player;
-    delete this->bullet;
+
+    //Bullets
+    for (auto &i : this->bullets)
+    {
+        delete i;
+    }
 }
 
 //Accessors
@@ -75,14 +81,19 @@ void Game::poll_events()
 
 void Game::move_player()
 {
-    if(Keyboard::isKeyPressed(Keyboard::Key::A) && this->player->getX() > 0)
+    if(Keyboard::isKeyPressed(Keyboard::Key::A) && this->player->get_pos().x > 0)
         this->player->move(-1.f, 0.f);
-    if(Keyboard::isKeyPressed(Keyboard::Key::D) && this->player->getX() < (this->window->getSize().x - this->player->getSize())) 
+    if(Keyboard::isKeyPressed(Keyboard::Key::D) && this->player->get_pos().x < (this->window->getSize().x - this->player->get_size())) 
         this->player->move(1.f, 0.f);
-    if(Keyboard::isKeyPressed(Keyboard::Key::W) && this->player->getY() > 0)
+    if(Keyboard::isKeyPressed(Keyboard::Key::W) && this->player->get_pos().y > 0)
         this->player->move(0.f, -1.f);
-    if(Keyboard::isKeyPressed(Keyboard::Key::S) && this->player->getY() < (this->window->getSize().y - this->player->getSize()))
+    if(Keyboard::isKeyPressed(Keyboard::Key::S) && this->player->get_pos().y < (this->window->getSize().y - this->player->get_size()))
         this->player->move(0.f, 1.f);
+}
+
+void Game::spawn_bullet()
+{
+    this->bullets.push_back(this->bullet);
 }
 
 void Game::update_player()
@@ -93,7 +104,31 @@ void Game::update_player()
 
 void Game::update_bullets()
 {
-    this->bullet->move(1.f, 0.f);
+    unsigned counter = 0;
+    for (auto *b : this->bullets)
+    {
+        b->update();
+
+        //Bullet culling 
+        if((b->outside_window(this->resolution.width, this->resolution.height)))
+        {
+            //Delete individual bullet
+            delete this->bullets.at(counter);
+            this->bullets.erase(this->bullets.begin() + counter);
+            --counter;
+        }else if (this->bullets[counter]->get_bounds().intersects(this->player->get_bounds()) && this->bullets[counter]->impact_destruction() == true)
+        {
+            //Delete individual bullet
+            delete this->bullets.at(counter);
+            this->bullets.erase(this->bullets.begin() + counter);
+            --counter;
+
+            //Lower health
+            this->player->set_health(-1);
+        }
+
+        ++counter;
+    }
 }
 
 void Game::update()
@@ -110,7 +145,11 @@ void Game::render()
 
     //Draw new frame with game objects
     this->player->render(*this->window);
-    this->bullet->render(*this->window);
+    
+    for (auto *b : this->bullets)
+    {
+        b->render(*this->window);
+    }
 
     this->window->display();
 

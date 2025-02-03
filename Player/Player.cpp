@@ -5,6 +5,7 @@ using namespace sf;
 // Private Methods
 void Player::init_attributes()
 {
+    this->health = 5;
     this->movementSpeed = 3.f;
     this->size = 25.f;
 }
@@ -30,22 +31,32 @@ Player::~Player()
 
 //Accessors
 
-const float Player::getX() const
+const int Player::get_health() const
 {
-    return this->hitbox.getPosition().x;
+    return this->health;
 }
 
-const float Player::getY() const
-{
-    return this->hitbox.getPosition().y;
-}
-
-const float Player::getSize() const
+const float Player::get_size() const
 {
     return this->size;
 }
 
+const Vector2f &Player::get_pos() const
+{
+    return this->hitbox.getPosition();
+}
+
+const FloatRect Player::get_bounds() const
+{
+    return this->hitbox.getGlobalBounds();
+}
+
 //Methods
+
+void Player::set_health(const int health_change)
+{
+    this->health = this->health + health_change;
+}
 
 void Player::move(const float dirX, const float dirY)
 {

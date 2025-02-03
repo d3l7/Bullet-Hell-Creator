@@ -16,11 +16,14 @@ class Game
 {
 private:
     //Attributes
-
+    
     //Window
     RenderWindow* window;
     VideoMode resolution;
     Event ev;
+
+    //Resources
+    std::vector<Bullet*> bullets;  //Holds the current bullet sequence
 
     //Bullet
     Bullet* bullet;
@@ -47,9 +50,11 @@ public:
     void poll_events();
     
     void move_player();
+    void spawn_bullet();
 
     void update_player();
     void update_bullets();
+    void check_collision();
 
     void update();
     void render();

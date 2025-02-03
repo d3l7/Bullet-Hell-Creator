@@ -3,8 +3,7 @@
 #include "SFML/Graphics.hpp"
 #include "SFML/Window.hpp"
 #include "SFML/System.hpp"
-#include "SFML/Audio.hpp"
-#include "SFML/Network.hpp"
+#include <iostream>
 
 using namespace sf;
 
@@ -12,6 +11,8 @@ class Player
 {
 private:
     //Attributes
+    int health;
+
     RectangleShape hitbox;
     float movementSpeed;
     float size;
@@ -26,12 +27,13 @@ public:
     ~Player();
 
     //Accessors
-
-    const float getX() const;
-    const float getY() const;
-    const float getSize() const;
+    const int get_health() const;
+    const float get_size() const;
+    const Vector2f& get_pos() const;
+    const FloatRect get_bounds() const;
 
     //Methods
+    void set_health(const int health_change);
     void move(const float dirX, const float dirY);
     
     void update();
