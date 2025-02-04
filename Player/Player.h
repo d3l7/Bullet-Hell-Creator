@@ -27,13 +27,20 @@ public:
     ~Player();
 
     //Accessors
+
+    //Getters
     const int get_health() const;
     const float get_size() const;
     const Vector2f& get_pos() const;
     const FloatRect get_bounds() const;
+    const float get_speed() const;
 
-    //Methods
+    //Setters
     void set_health(const int health_change);
+    void set_size(const float new_size);
+    void set_speed(const float new_speed);
+    
+    //Methods
     void move(const float dirX, const float dirY);
     
     void update();

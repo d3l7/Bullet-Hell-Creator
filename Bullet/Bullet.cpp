@@ -15,8 +15,12 @@ void Bullet::init_attributes()
     this->speedMultiplier = 2.5f;
 
     //Base speed is 0 since we want to check for fire time first
-    this->movementSpeed.x = 0.f;  
-    this->movementSpeed.y = 0.f;
+    this->velocity.x = 0.f;  
+    this->velocity.y = 0.f;
+
+    //Temporary speed variables to update speed until we want to fire the bullet
+    this->tempVelocity.x = 0.f;
+    this->tempVelocity.y = 0.f;
 }
 
 void Bullet::init_hitbox()
@@ -27,11 +31,8 @@ void Bullet::init_hitbox()
 }
 
 //Constructors / Destructors
-Bullet::Bullet(Vector2f movement_speed)
+Bullet::Bullet()
 {
-    this->startSpeed.x = movement_speed.x;
-    this->startSpeed.y = movement_speed.y;
-
     this->init_attributes();
     this->init_hitbox();
 }
@@ -42,6 +43,8 @@ Bullet::~Bullet()
 }
 
 //Accessors
+
+//Getters
 const float Bullet::get_size() const
 {
     return this->size;
@@ -49,7 +52,7 @@ const float Bullet::get_size() const
 
 const Vector2f Bullet::get_speed() const
 {
-    return this->movementSpeed;
+    return this->velocity;
 }
 
 const FloatRect Bullet::get_bounds() const
@@ -75,11 +78,16 @@ const bool Bullet::impact_destruction() const
     return this->destroyOnImpact;
 }
 
-// Public Methods
+//Setters
+void Bullet::set_size(const float new_size)
+{
+    this->hitbox.setSize(Vector2f(new_size, new_size));
+}
+
 void Bullet::set_speed(const Vector2f new_speed)
 {
-    this->movementSpeed.x = new_speed.x;
-    this->movementSpeed.y = new_speed.y;
+    this->velocity.x = new_speed.x;
+    this->velocity.y = new_speed.y;
 }
 
 void Bullet::set_fire_time(const int time)
@@ -87,9 +95,10 @@ void Bullet::set_fire_time(const int time)
     this->timeToFire = time;
 }
 
+// Public Methods
 void Bullet::fire_bullet()
 {
-    this->set_speed(this->startSpeed);
+    this->set_speed(this->tempVelocity);
 }
 
 void Bullet::turn_to_target(const float obj_centre_x, const float obj_centre_y)
@@ -102,7 +111,7 @@ void Bullet::turn_to_target(const float obj_centre_x, const float obj_centre_y)
     aimDir = objCentre - bulletCentre;
     aimDirNorm = aimDir / static_cast<float>(sqrt(pow(aimDir.x, 2) + pow(aimDir.y, 2)));  // Normalise the Vector
 
-    this->set_speed(aimDirNorm);
+    this->tempVelocity = aimDirNorm;
 
 }
 
@@ -116,7 +125,7 @@ void Bullet::update()
         this->fire_bullet();
     }
     //Move bullet
-    this->hitbox.move(this->movementSpeed * this->speedMultiplier);
+    this->hitbox.move(this->velocity * this->speedMultiplier);
 }
 
 void Bullet::render(RenderTarget& target)

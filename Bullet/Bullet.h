@@ -17,8 +17,8 @@ private:
     float timeToFire;  //Unique to bullets since we want to fire them in sequence
     float size;
 
-    Vector2f movementSpeed;
-    Vector2f startSpeed;
+    Vector2f velocity;
+    Vector2f tempVelocity;
     float speedMultiplier;
 
     bool destroyOnImpact;
@@ -32,20 +32,24 @@ private:
 
 public:
     //Constructors / Destructors
-    Bullet(Vector2f movement_speed);
+    Bullet();
     virtual ~Bullet();
 
-    //Accessors
+    //Accessors 
+    
+    //Getters
     const float get_size() const;
     const Vector2f get_speed() const;
     const FloatRect get_bounds() const;
     const bool outside_window(const float bound_x, const float bound_y) const;
     const bool impact_destruction() const;
 
-    //Methods
-    void set_speed(const Vector2f speed);
+    //Setters
+    void set_size(const float new_size);
+    void set_speed(const Vector2f new_speed);
     void set_fire_time(const int time);
 
+    //Methods
     void fire_bullet();
     void turn_to_target(const float obj_centre_x, const float objcentre_y);
 
