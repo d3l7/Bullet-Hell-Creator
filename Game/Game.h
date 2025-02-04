@@ -2,6 +2,7 @@
 
 #include "../Player/Player.h"
 #include "../Bullet/Bullet.h"
+#include <cmath>
 
 using namespace sf;
 
@@ -54,7 +55,6 @@ public:
 
     void update_player();
     void update_bullets();
-    void check_collision();
 
     void update();
     void render();

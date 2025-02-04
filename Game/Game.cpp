@@ -27,7 +27,8 @@ void Game::init_player()  //Ffs
 //Temp
 void Game::init_bullet()
 {
-   this->bullet = new Bullet(1.f, 0.f, 2.5f);
+   this->bullet = new Bullet(Vector2f(0.f, 0.f));
+   this->bullet->turn_to_target(this->player->get_pos().x + this->player->get_size(), this->player->get_pos().y + this->player->get_size());
    this->spawn_bullet();
 }
 

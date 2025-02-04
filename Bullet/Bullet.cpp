@@ -1,5 +1,4 @@
 #include "Bullet.h"
-#include <iostream>
 
 using namespace sf;
 
@@ -7,26 +6,31 @@ using namespace sf;
 void Bullet::init_attributes()
 {
     this->size = 7.5f;
+    
     this->destroyOnImpact = true;
     this->destroyOnLeavingScreen = true;
+    
     this->fireOnSpawn = false;
-    this->timeToFire = 60;
-    this->movementSpeed = 0;  //Base speed is 0 since we want to check for fire time first
+    this->timeToFire = 240;
+    this->speedMultiplier = 2.5f;
+
+    //Base speed is 0 since we want to check for fire time first
+    this->movementSpeed.x = 0.f;  
+    this->movementSpeed.y = 0.f;
 }
 
 void Bullet::init_hitbox()
 {
-    this->hitbox.setPosition(0.f, 360.f);
+    this->hitbox.setPosition(0.f, 0.f);
     this->hitbox.setSize(Vector2f(this->size, this->size));
     this->hitbox.setFillColor(Color::Red);
 }
 
 //Constructors / Destructors
-Bullet::Bullet(float dir_x, float dir_y, float movement_speed)
+Bullet::Bullet(Vector2f movement_speed)
 {
-    this->direction.x = dir_x;
-    this->direction.y = dir_y;
-    this->startSpeed = movement_speed;
+    this->startSpeed.x = movement_speed.x;
+    this->startSpeed.y = movement_speed.y;
 
     this->init_attributes();
     this->init_hitbox();
@@ -43,7 +47,7 @@ const float Bullet::get_size() const
     return this->size;
 }
 
-const float Bullet::get_speed() const
+const Vector2f Bullet::get_speed() const
 {
     return this->movementSpeed;
 }
@@ -72,9 +76,10 @@ const bool Bullet::impact_destruction() const
 }
 
 // Public Methods
-void Bullet::set_speed(const float new_speed)
+void Bullet::set_speed(const Vector2f new_speed)
 {
-    this->movementSpeed = new_speed;
+    this->movementSpeed.x = new_speed.x;
+    this->movementSpeed.y = new_speed.y;
 }
 
 void Bullet::set_fire_time(const int time)
@@ -87,18 +92,31 @@ void Bullet::fire_bullet()
     this->set_speed(this->startSpeed);
 }
 
+void Bullet::turn_to_target(const float obj_centre_x, const float obj_centre_y)
+{
+    Vector2f aimDir;
+    Vector2f aimDirNorm;
+
+    Vector2f objCentre = Vector2f(obj_centre_x, obj_centre_y);
+    Vector2f bulletCentre = Vector2f((this->hitbox.getPosition().x + this->get_size()), (this->hitbox.getPosition().y + this->get_size()));
+    aimDir = objCentre - bulletCentre;
+    aimDirNorm = aimDir / static_cast<float>(sqrt(pow(aimDir.x, 2) + pow(aimDir.y, 2)));  // Normalise the Vector
+
+    this->set_speed(aimDirNorm);
+
+}
+
 void Bullet::update()
 {
     //Allow for bullet waiting time after spawn
     if(not this->fireOnSpawn and (this->timeToFire != 0.f))
     {
         --this->timeToFire;
-        std::cout << this->timeToFire << std::endl;
     }else{
         this->fire_bullet();
     }
     //Move bullet
-    this->hitbox.move(this->movementSpeed * this->direction);
+    this->hitbox.move(this->movementSpeed * this->speedMultiplier);
 }
 
 void Bullet::render(RenderTarget& target)
