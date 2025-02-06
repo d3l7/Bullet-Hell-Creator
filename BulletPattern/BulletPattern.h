@@ -14,8 +14,10 @@ class BulletPattern
 {
 
 private:
-    //Attributes
+    //Data structures
     std::vector<Bullet*> pattern;
+
+    //Attributes
     int maxBullets;
 
     //Private Methods
@@ -29,6 +31,9 @@ public:
     //Accessors
 
     //Methods
-    void enqueue_bullet(Bullet bullet);
-    void dequeue_bullet(Bullet bullet);
+    void add_bullet(Bullet* bullet);
+    void delete_bullet(int position);
+
+    bool is_full() ;
+    bool is_empty();
 };

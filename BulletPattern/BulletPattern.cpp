@@ -19,12 +19,32 @@ BulletPattern::~BulletPattern()
 }
 
 //Methods
-void BulletPattern::enqueue_bullet(Bullet bullet)
+void BulletPattern::add_bullet(Bullet* bullet)
+{
+    this->pattern.push_back(bullet);
+}
+
+void BulletPattern::delete_bullet(int position)
 {
 
 }
 
-void BulletPattern::dequeue_bullet(Bullet bullet)
+bool BulletPattern::is_full() 
 {
+    if (this->pattern.size() == maxBullets)
+    {
+        return true;
+    } else {
+        return false;
+    }
+}
 
+bool BulletPattern::is_empty()
+{
+    if (this->pattern.size() < 0)
+    {
+        return true;
+    } else {
+        return false;
+    }
 }
