@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../Player/Player.h"
-#include "../Bullet/Bullet.h"
+#include "../BulletPattern/BulletPattern.h"
 #include <cmath>
 
 using namespace sf;
@@ -24,7 +24,7 @@ private:
     Event ev;
 
     //Resources
-    std::vector<Bullet*> bullets;  //Holds the current bullet sequence
+    BulletPattern* bullets;  //Holds the current bullet sequence
 
     //Bullet
     Bullet* bullet;
@@ -37,6 +37,7 @@ private:
     void init_window();
     void init_player();
     void init_bullet();
+    void init_pattern();
 
 public:
     //Constructors / Destructors

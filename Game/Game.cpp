@@ -25,11 +25,18 @@ void Game::init_player()  //Ffs
 
 
 //Temp
+
+
 void Game::init_bullet()
 {
    this->bullet = new Bullet();
    this->spawn_bullet();
    this->bullet->turn_to_target(this->player->get_pos().x + this->player->get_size(), this->player->get_pos().y + this->player->get_size());
+}
+
+void Game::init_pattern()
+{
+    this->bullets = new BulletPattern;
 }
 
 //Constructors / Destructors
@@ -39,6 +46,7 @@ Game::Game()
     this->init_window();
     this->init_player();
     this->init_bullet();
+    this->init_pattern();
 }
 
 Game::~Game()
@@ -47,7 +55,7 @@ Game::~Game()
     delete this->player;
 
     //Bullets
-    for (auto &i : this->bullets)
+    for (auto &i : this->bullets->get_pattern())
     {
         delete i;
     }
@@ -94,7 +102,7 @@ void Game::move_player()
 
 void Game::spawn_bullet()
 {
-    this->bullets.push_back(this->bullet);
+    this->bullets->add_bullet(this->bullet);
 }
 
 void Game::update_player()
@@ -106,7 +114,7 @@ void Game::update_player()
 void Game::update_bullets()
 {
     unsigned counter = 0;
-    for (auto *b : this->bullets)
+    for (auto *b : this->bullets->get_pattern())
     {
         b->update();
 
@@ -114,14 +122,12 @@ void Game::update_bullets()
         if((b->outside_window(this->resolution.width, this->resolution.height)))
         {
             //Delete individual bullet
-            delete this->bullets.at(counter);
-            this->bullets.erase(this->bullets.begin() + counter);
+            this->bullets->delete_bullet(counter);
             --counter;
-        }else if (this->bullets[counter]->get_bounds().intersects(this->player->get_bounds()) && this->bullets[counter]->impact_destruction() == true)
+        }else if (this->bullets->get_pattern()[counter]->get_bounds().intersects(this->player->get_bounds()) && this->bullets->get_pattern()[counter]->impact_destruction() == true)
         {
             //Delete individual bullet
-            delete this->bullets.at(counter);
-            this->bullets.erase(this->bullets.begin() + counter);
+            this->bullets->delete_bullet(counter);
             --counter;
 
             //Lower health
@@ -147,7 +153,7 @@ void Game::render()
     //Draw new frame with game objects
     this->player->render(*this->window);
     
-    for (auto *b : this->bullets)
+    for (auto *b : this->bullets->get_pattern())
     {
         b->render(*this->window);
     }
