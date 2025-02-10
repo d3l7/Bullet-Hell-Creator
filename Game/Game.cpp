@@ -124,7 +124,7 @@ void Game::update_bullets()
             //Delete individual bullet
             this->bullets->delete_bullet(counter);
             --counter;
-        }else if (this->bullets->get_pattern()[counter]->get_bounds().intersects(this->player->get_bounds()) && this->bullets->get_pattern()[counter]->impact_destruction() == true)
+        }else if (this->bullets->get_pattern().at(counter)->get_bounds().intersects(this->player->get_bounds()) && this->bullets->get_pattern().at(counter)->impact_destruction() == true)
         {
             //Delete individual bullet
             this->bullets->delete_bullet(counter);
@@ -144,6 +144,7 @@ void Game::update()
 
     this->update_player();
     this->update_bullets();
+
 }
 
 void Game::render()

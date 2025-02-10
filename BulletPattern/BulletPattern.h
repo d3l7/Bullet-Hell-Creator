@@ -35,9 +35,4 @@ public:
     //Methods
     void add_bullet(Bullet* bullet);
     void delete_bullet(int position);
-
-    bool is_full();
-    bool is_empty();
-
-    Bullet* peek_bullet();
 };
