@@ -26,8 +26,10 @@ private:
     //Resources
     BulletPattern* bullets;  //Holds the current bullet sequence
 
-    //Bullet
+    //Bullets
     Bullet* bullet;
+    Bullet* bulletTwo;
+    Bullet* bulletThree;
 
     //Player
     Player* player;  
@@ -36,7 +38,9 @@ private:
     void init_attributes();
     void init_window();
     void init_player();
-    void init_bullet();
+    
+    //Temp
+    void init_bullet(Bullet* bullet, const float pos_x, const float pos_y);
     void init_pattern();
 
 public:
@@ -52,7 +56,7 @@ public:
     void poll_events();
     
     void move_player();
-    void spawn_bullet();
+    void spawn_bullet(Bullet* bullet, const float pos_x, const float pos_y);
 
     void update_player();
     void update_bullets();

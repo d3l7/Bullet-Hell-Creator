@@ -25,7 +25,6 @@ void Bullet::init_attributes()
 
 void Bullet::init_hitbox()
 {
-    this->hitbox.setPosition(0.f, 0.f);
     this->hitbox.setSize(Vector2f(this->size, this->size));
     this->hitbox.setFillColor(Color::Red);
 }
@@ -93,6 +92,11 @@ void Bullet::set_speed(const Vector2f new_speed)
 void Bullet::set_fire_time(const int time)
 {
     this->timeToFire = time;
+}
+
+void Bullet::set_pos(const float pos_x, const float pos_y)
+{
+    this->hitbox.setPosition(Vector2f(pos_x, pos_y));
 }
 
 // Public Methods

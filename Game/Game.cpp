@@ -23,15 +23,11 @@ void Game::init_player()  //Ffs
     this->player = new Player();
 }
 
-
-//Temp
-
-
-void Game::init_bullet()
+void Game::init_bullet(Bullet* bullet, const float pos_x, const float pos_y)
 {
-   this->bullet = new Bullet();
-   this->spawn_bullet();
-   this->bullet->turn_to_target(this->player->get_pos().x + this->player->get_size(), this->player->get_pos().y + this->player->get_size());
+   bullet = new Bullet();
+   this->spawn_bullet(bullet, pos_x, pos_y);
+   bullet->turn_to_target(this->player->get_pos().x + this->player->get_size(), this->player->get_pos().y + this->player->get_size());
 }
 
 void Game::init_pattern()
@@ -45,8 +41,12 @@ Game::Game()
     this->init_attributes();
     this->init_window();
     this->init_player();
-    this->init_bullet();
-    this->init_pattern();
+    this->init_pattern();  //Must be initialised before initialising any bullets, since causes segmentation errors otherwise (if bullets are intialised first there will be no vector to push them back into)
+
+    //Messy, just testing atm
+    this->init_bullet(this->bullet, 0.f, 0.f);
+    this->init_bullet(this->bulletTwo, resolution.width - 7.5f, 0.f);
+    this->init_bullet(this->bulletThree, 0.f, resolution.height - 7.5f);
 }
 
 Game::~Game()
@@ -100,9 +100,10 @@ void Game::move_player()
         this->player->move(0.f, 1.f);
 }
 
-void Game::spawn_bullet()
+void Game::spawn_bullet(Bullet* bullet, const float pos_x, const float pos_y)
 {
-    this->bullets->add_bullet(this->bullet);
+    bullet->set_pos(pos_x, pos_y);
+    this->bullets->add_bullet(bullet);
 }
 
 void Game::update_player()
@@ -113,9 +114,8 @@ void Game::update_player()
 
 void Game::update_bullets()
 {
-    std::vector<Bullet*> pattern = this->bullets->get_pattern();
     unsigned counter = 0;
-    for (auto *b : pattern)
+    for (auto *b : this->bullets->get_pattern())
     {
         b->update();
 
@@ -125,7 +125,7 @@ void Game::update_bullets()
             //Delete individual bullet
             this->bullets->delete_bullet(counter);
             --counter;
-        }else if (pattern.at(counter)->get_bounds().intersects(this->player->get_bounds()) && pattern.at(counter)->impact_destruction() == true)
+        }else if (this->bullets->get_pattern()[counter]->get_bounds().intersects(this->player->get_bounds()) && this->bullets->get_pattern()[counter]->impact_destruction() == true)
         {
             //Delete individual bullet
             this->bullets->delete_bullet(counter);

@@ -4,7 +4,6 @@
 void BulletPattern::init_attributes()
 {
     this->maxBullets = 25;
-    this->pattern = {};
 }
 
 // Constructors / Destructors
@@ -28,7 +27,12 @@ const std::vector<Bullet*> BulletPattern::get_pattern() const
 //Methods
 void BulletPattern::add_bullet(Bullet* bullet)
 {
+    if (not this->is_full())
+    {
     this->pattern.push_back(bullet);
+    } else { 
+        std::cout << "Max bullets for pattern reached." << std::endl;
+    }
 }
 
 void BulletPattern::delete_bullet(int position)
@@ -40,16 +44,27 @@ void BulletPattern::delete_bullet(int position)
     }
 }
 
-bool BulletPattern::is_full()
+bool BulletPattern::is_full() 
 {
-    return false;
+    if (this->pattern.size() == maxBullets)
+    {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 bool BulletPattern::is_empty()
 {
-    if (this->pattern.size() == 0)
+    if (this->pattern.size() < 0)
     {
         return true;
+    } else {
+        return false;
     }
-    return false;
+}
+
+Bullet* BulletPattern::peek_bullet()
+{
+    return this->pattern.front();
 }

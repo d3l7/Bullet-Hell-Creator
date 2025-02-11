@@ -48,6 +48,7 @@ public:
     void set_size(const float new_size);
     void set_speed(const Vector2f new_speed);
     void set_fire_time(const int time);
+    void set_pos(const float pos_x, const float pos_y);
 
     //Methods
     void fire_bullet();

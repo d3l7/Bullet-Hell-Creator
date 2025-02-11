@@ -6,7 +6,7 @@ int main()
 {
     //Initialise game engine
     Game game;
-    
+
     //Game loop
 
     while(game.running())

@@ -38,4 +38,6 @@ public:
 
     bool is_full();
     bool is_empty();
+
+    Bullet* peek_bullet();
 };
