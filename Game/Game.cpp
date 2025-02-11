@@ -113,8 +113,9 @@ void Game::update_player()
 
 void Game::update_bullets()
 {
+    std::vector<Bullet*> pattern = this->bullets->get_pattern();
     unsigned counter = 0;
-    for (auto *b : this->bullets->get_pattern())
+    for (auto *b : pattern)
     {
         b->update();
 
@@ -124,7 +125,7 @@ void Game::update_bullets()
             //Delete individual bullet
             this->bullets->delete_bullet(counter);
             --counter;
-        }else if (this->bullets->get_pattern().at(counter)->get_bounds().intersects(this->player->get_bounds()) && this->bullets->get_pattern().at(counter)->impact_destruction() == true)
+        }else if (pattern.at(counter)->get_bounds().intersects(this->player->get_bounds()) && pattern.at(counter)->impact_destruction() == true)
         {
             //Delete individual bullet
             this->bullets->delete_bullet(counter);

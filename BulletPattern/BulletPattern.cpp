@@ -4,6 +4,7 @@
 void BulletPattern::init_attributes()
 {
     this->maxBullets = 25;
+    this->pattern = {};
 }
 
 // Constructors / Destructors
@@ -32,6 +33,23 @@ void BulletPattern::add_bullet(Bullet* bullet)
 
 void BulletPattern::delete_bullet(int position)
 {
-    delete this->pattern.at(position);
-    this->pattern.erase(this->pattern.begin() + position);
+    if (not this->is_empty())
+    {
+        delete this->pattern.at(position);
+        this->pattern.erase(this->pattern.begin() + position);
+    }
+}
+
+bool BulletPattern::is_full()
+{
+    return false;
+}
+
+bool BulletPattern::is_empty()
+{
+    if (this->pattern.size() == 0)
+    {
+        return true;
+    }
+    return false;
 }
