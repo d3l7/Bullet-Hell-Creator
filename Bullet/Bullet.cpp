@@ -59,6 +59,11 @@ const FloatRect Bullet::get_bounds() const
     return this->hitbox.getGlobalBounds();
 }
 
+const int Bullet::get_fire_time() const
+{
+    return this->timeToFire;
+}
+
 const bool Bullet::outside_window(const float bound_x, const float bound_y) const
 {
     if((this->get_bounds().top + this->get_bounds().height < 0.f)  //Top

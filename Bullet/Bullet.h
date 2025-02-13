@@ -34,13 +34,12 @@ public:
     //Constructors / Destructors
     Bullet();
     virtual ~Bullet();
-
-    //Accessors 
     
     //Getters
     const float get_size() const;
     const Vector2f get_speed() const;
     const FloatRect get_bounds() const;
+    const int get_fire_time() const;
     const bool outside_window(const float bound_x, const float bound_y) const;
     const bool impact_destruction() const;
 

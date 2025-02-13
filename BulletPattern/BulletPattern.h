@@ -19,6 +19,7 @@ private:
 
     //Attributes
     int maxBullets;
+    int bulletFireDelay; 
 
     //Private Methods
     void init_attributes();

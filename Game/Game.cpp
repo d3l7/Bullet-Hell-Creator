@@ -132,7 +132,7 @@ void Game::update_bullets()
             --counter;
 
             //Lower health
-            this->player->set_health(-1);
+            this->player->set_health(-1);  //Mb make a condition attribute to check for this stuff? then can work out other stuff like i frames later :P
         }
 
         ++counter;

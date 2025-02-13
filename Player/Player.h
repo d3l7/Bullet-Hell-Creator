@@ -26,8 +26,6 @@ public:
     Player();
     ~Player();
 
-    //Accessors
-
     //Getters
     const int get_health() const;
     const float get_size() const;

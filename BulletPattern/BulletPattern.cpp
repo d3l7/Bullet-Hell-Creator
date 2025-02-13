@@ -4,12 +4,13 @@
 void BulletPattern::init_attributes()
 {
     this->maxBullets = 25;
+    this->bulletFireDelay = 0;
 }
 
 // Constructors / Destructors
 BulletPattern::BulletPattern()
 {
-
+    this->init_attributes();
 }
 
 BulletPattern::~BulletPattern()
@@ -29,7 +30,8 @@ void BulletPattern::add_bullet(Bullet* bullet)
 {
     if (not this->is_full())
     {
-    this->pattern.push_back(bullet);
+        bullet->set_fire_time(bullet->get_fire_time() + (this->bulletFireDelay*(this->pattern.size())));  //Add a delay proportional to the position of the bullet in the queue
+        this->pattern.push_back(bullet);
     } else { 
         std::cout << "Max bullets for pattern reached." << std::endl;
     }
