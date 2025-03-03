@@ -18,21 +18,31 @@ void Game::init_window()
     this->window->setFramerateLimit(120);  //Might make this part of user settings later :P
 }
 
-void Game::init_player()  //Ffs
+void Game::init_player() 
 {
     this->player = new Player();
 }
 
-void Game::init_bullet(Bullet* bullet, const float pos_x, const float pos_y)
-{
-   bullet = new Bullet();
-   this->spawn_bullet(bullet, pos_x, pos_y);
-   bullet->turn_to_target(this->player->get_pos().x + this->player->get_size(), this->player->get_pos().y + this->player->get_size());
-}
 
 void Game::init_pattern()
 {
-    this->bullets = new BulletPattern;
+    this->bullets = new BulletPattern();
+}
+
+/*
+void Game::init_pattern(BulletPattern* pattern)  //Doesn't like passing in a pattern reference through an argument???????????????? fuck off lmao
+{
+    pattern = new BulletPattern();
+}
+
+Not working???????
+*/
+
+void Game::init_bullet(BulletPattern* pattern, Bullet* bullet, const float pos_x, const float pos_y)
+{
+   bullet = new Bullet();
+   this->spawn_bullet(pattern, bullet, pos_x, pos_y);
+   bullet->turn_to_target(this->player->get_pos().x + this->player->get_size(), this->player->get_pos().y + this->player->get_size());
 }
 
 //Constructors / Destructors
@@ -44,9 +54,9 @@ Game::Game()
     this->init_pattern();  //Must be initialised before initialising any bullets, since causes segmentation errors otherwise (if bullets are intialised first there will be no vector to push them back into)
 
     //Messy, just testing atm
-    this->init_bullet(this->bullet, 0.f, 0.f);
-    this->init_bullet(this->bulletTwo, resolution.width - 7.5f, 0.f);
-    this->init_bullet(this->bulletThree, 0.f, resolution.height - 7.5f);
+    this->init_bullet(this->bullets, this->bullet, 0.f, 0.f);
+    this->init_bullet(this->bullets, this->bulletTwo, resolution.width - 7.5f, 0.f);
+    this->init_bullet(this->bullets, this->bulletThree, 0.f, resolution.height - 7.5f);
 }
 
 Game::~Game()
@@ -55,10 +65,12 @@ Game::~Game()
     delete this->player;
 
     //Bullets
-    for (auto &i : this->bullets->get_pattern())
+    for (auto &b : this->bullets->get_pattern())
     {
-        delete i;
+        delete b;
     }
+
+    delete this->bullets;
 }
 
 //Accessors
@@ -100,10 +112,10 @@ void Game::move_player()
         this->player->move(0.f, 1.f);
 }
 
-void Game::spawn_bullet(Bullet* bullet, const float pos_x, const float pos_y)
+void Game::spawn_bullet(BulletPattern* pattern, Bullet* bullet, const float pos_x, const float pos_y)
 {
     bullet->set_pos(pos_x, pos_y);
-    this->bullets->add_bullet(bullet);
+    pattern->add_bullet(bullet);
 }
 
 void Game::update_player()

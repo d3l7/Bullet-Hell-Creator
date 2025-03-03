@@ -39,6 +39,7 @@ void BulletPattern::add_bullet(Bullet* bullet)
 
 void BulletPattern::delete_bullet(int position)
 {
+    //Memory management
     if (not this->is_empty())
     {
         delete this->pattern.at(position);
@@ -66,7 +67,7 @@ bool BulletPattern::is_empty()
     }
 }
 
-Bullet* BulletPattern::peek_bullet()
+Bullet* BulletPattern::peek()
 {
     return this->pattern.front();
 }

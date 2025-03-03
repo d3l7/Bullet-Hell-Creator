@@ -8,6 +8,13 @@
 
 using namespace sf;
 
+/*
+    Class that holds everything to do with individual bullet objects
+    - Organises all of the SFML specific data such as positions and sizes
+    - Provides various functionality to bullets such as altering movement speed or trajectory
+    - Provides accessors to allow users to customize the bullets in the future
+*/
+
 class Bullet
 {
 private:

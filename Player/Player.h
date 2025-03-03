@@ -7,6 +7,13 @@
 
 using namespace sf;
 
+/*
+    Class to initialise everything to do with the player
+    - Declares and initialises player attributes
+    - Provides accessors for appropriate player attributes
+    - Provides movement capability within refernce to the player hitbox relative to the window
+*/
+
 class Player
 {
 private:
