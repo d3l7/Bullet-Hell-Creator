@@ -59,7 +59,7 @@ bool BulletPattern::is_full()
 
 bool BulletPattern::is_empty()
 {
-    if (this->pattern.size() < 0)
+    if (this->pattern.size() <= 0)
     {
         return true;
     } else {

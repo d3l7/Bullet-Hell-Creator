@@ -32,7 +32,6 @@ public:
     //Accessors
     const std::vector<Bullet*> get_pattern() const;
 
-
     //Methods
     void add_bullet(Bullet* bullet);
     void delete_bullet(int position);

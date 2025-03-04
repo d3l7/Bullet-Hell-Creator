@@ -6,6 +6,8 @@ using namespace sf;
 void Game::init_attributes()
 {
     this->window = nullptr;  //Initialise window pointer
+    this->bullets = new BulletPattern();
+    std::cout << this->bullets->peek() << std::endl;
 }
 
 void Game::init_window()
@@ -23,21 +25,11 @@ void Game::init_player()
     this->player = new Player();
 }
 
-
-void Game::init_pattern()
-{
-    this->bullets = new BulletPattern(); //This works
-}
-
-/*
 void Game::init_pattern(BulletPattern* pattern)
 {
-    pattern = new BulletPattern();  //This doesn't work
+    pattern = new BulletPattern();
+    this->bulletSequence.push_back(pattern);
 }
-
-Not working??????? Causes a segmentation error once passing bullets into the function, 
-which doesn't make sense to me since the init_bullet function is working just fine and does the same with Bullet objects
-*/
 
 void Game::init_bullet(BulletPattern* pattern, Bullet* bullet, const float pos_x, const float pos_y)
 {
@@ -50,18 +42,17 @@ void Game::init_bullet(BulletPattern* pattern, Bullet* bullet, const float pos_x
 Game::Game()
 {
     this->init_attributes();
-    std::cout << "a" << std::endl;
     this->init_window();
-    std::cout << "a" << std::endl;
     this->init_player();
-    std::cout << "a" << std::endl;
-    this->init_pattern();  //Must be initialised before initialising any bullets, since causes segmentation errors otherwise (if bullets are intialised first there will be no vector to push them back into)
-    std::cout << "a" << std::endl;
+    this->init_pattern(this->bullets);
+    std::cout << this->bullets->peek() << std::endl;
 
     //Messy, just testing atm
     this->init_bullet(this->bullets, this->bullet, 0.f, 0.f);
     this->init_bullet(this->bullets, this->bulletTwo, resolution.width - 7.5f, 0.f);
     this->init_bullet(this->bullets, this->bulletThree, 0.f, resolution.height - 7.5f);
+
+    std::cout << this->bullets->peek() << std::endl;
 }
 
 Game::~Game()
