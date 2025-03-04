@@ -26,21 +26,22 @@ void Game::init_player()
 
 void Game::init_pattern()
 {
-    this->bullets = new BulletPattern();
+    this->bullets = new BulletPattern(); //This works
 }
 
 /*
-void Game::init_pattern(BulletPattern* pattern)  //Doesn't like passing in a pattern reference through an argument???????????????? fuck off lmao
+void Game::init_pattern(BulletPattern* pattern)
 {
-    pattern = new BulletPattern();
+    pattern = new BulletPattern();  //This doesn't work
 }
 
-Not working???????
+Not working??????? Causes a segmentation error once passing bullets into the function, 
+which doesn't make sense to me since the init_bullet function is working just fine and does the same with Bullet objects
 */
 
 void Game::init_bullet(BulletPattern* pattern, Bullet* bullet, const float pos_x, const float pos_y)
 {
-   bullet = new Bullet();
+   bullet = new Bullet();  //This works
    this->spawn_bullet(pattern, bullet, pos_x, pos_y);
    bullet->turn_to_target(this->player->get_pos().x + this->player->get_size(), this->player->get_pos().y + this->player->get_size());
 }
@@ -49,9 +50,13 @@ void Game::init_bullet(BulletPattern* pattern, Bullet* bullet, const float pos_x
 Game::Game()
 {
     this->init_attributes();
+    std::cout << "a" << std::endl;
     this->init_window();
+    std::cout << "a" << std::endl;
     this->init_player();
+    std::cout << "a" << std::endl;
     this->init_pattern();  //Must be initialised before initialising any bullets, since causes segmentation errors otherwise (if bullets are intialised first there will be no vector to push them back into)
+    std::cout << "a" << std::endl;
 
     //Messy, just testing atm
     this->init_bullet(this->bullets, this->bullet, 0.f, 0.f);
