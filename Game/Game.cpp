@@ -6,8 +6,6 @@ using namespace sf;
 void Game::init_attributes()
 {
     this->window = nullptr;  //Initialise window pointer
-    this->bullets = new BulletPattern();
-    this->counter = 0;
 }
 
 void Game::init_window()
@@ -25,15 +23,15 @@ void Game::init_player()
     this->player = new Player();
 }
 
-void Game::init_pattern(BulletPattern* pattern)
+void Game::init_pattern()
 {
-    pattern = new BulletPattern();
+    BulletPattern* pattern = new BulletPattern();
     this->bulletSequence.push_back(pattern);
 }
 
-void Game::init_bullet(BulletPattern* pattern, Bullet* bullet, const float pos_x, const float pos_y)
+void Game::init_bullet(BulletPattern* pattern, const float pos_x, const float pos_y)
 {
-   bullet = new Bullet();  //This works
+   Bullet* bullet = new Bullet();  //This works
    this->spawn_bullet(pattern, bullet, pos_x, pos_y);
    bullet->turn_to_target(this->player->get_pos().x + this->player->get_size(), this->player->get_pos().y + this->player->get_size());
 }
@@ -44,12 +42,12 @@ Game::Game()
     this->init_attributes();
     this->init_window();
     this->init_player();
-    this->init_pattern(this->bullets);
+    this->init_pattern();
 
     //Messy, just testing atm
-    this->init_bullet(this->bullets, this->bullet, 0.f, 0.f);
-    this->init_bullet(this->bullets, this->bulletTwo, resolution.width - 7.5f, 0.f);
-    this->init_bullet(this->bullets, this->bulletThree, 0.f, resolution.height - 7.5f);
+    this->init_bullet(this->bulletSequence[0], 0.f, 0.f);
+    this->init_bullet(this->bulletSequence[0], resolution.width - 7.5f, 0.f);
+    this->init_bullet(this->bulletSequence[0], 0.f, resolution.height - 7.5f);
 }
 
 Game::~Game()
@@ -57,13 +55,11 @@ Game::~Game()
     delete this->window;
     delete this->player;
 
-    //Bullets
-    for (auto &b : this->bullets->get_pattern())
+    //Patterns
+    for (auto *p : this->bulletSequence)
     {
-        delete b;
+        delete p;
     }
-
-    delete this->bullets;
 }
 
 //Accessors
@@ -119,28 +115,33 @@ void Game::update_player()
 
 void Game::update_bullets()
 {
-    unsigned counter = 0;
-    for (auto *b : this->bullets->get_pattern())
+    //Access each pattern
+    for (auto *p : this->bulletSequence)
     {
-        b->update();
-
-        //Bullet culling 
-        if((b->outside_window(this->resolution.width, this->resolution.height)))
+        unsigned counter = 0;
+        //Access each bullet
+        for (auto *b : p->get_pattern())
         {
-            //Delete individual bullet
-            this->bullets->delete_bullet(counter);
-            --counter;
-        }else if (this->bullets->get_pattern()[counter]->get_bounds().intersects(this->player->get_bounds()) && this->bullets->get_pattern()[counter]->impact_destruction() == true)
-        {
-            //Delete individual bullet
-            this->bullets->delete_bullet(counter);
-            --counter;
+            b->update();
 
-            //Lower health
-            this->player->set_health(-1);  //Mb make a condition attribute to check for this stuff? then can work out other stuff like i frames later :P
+            //Bullet culling 
+            if((b->outside_window(this->resolution.width, this->resolution.height)))
+            {
+                //Delete individual bullet
+                p->delete_bullet(counter);
+                --counter;
+            }else if (p->get_pattern()[counter]->get_bounds().intersects(this->player->get_bounds()) && p->get_pattern()[counter]->impact_destruction() == true)
+            {
+                //Delete individual bullet
+                p->delete_bullet(counter);
+                --counter;
+
+                //Lower health
+                this->player->set_health(-1);  //Mb make a condition attribute to check for this stuff? then can work out other stuff like i frames later :P
+            }
+
+            ++counter;
         }
-
-        ++counter;
     }
 }
 
@@ -169,11 +170,13 @@ void Game::render()
     //Draw new frame with game objects
     this->player->render(*this->window);
     
-    for (auto *b : this->bullets->get_pattern())
+    for (auto *p : this->bulletSequence)
     {
-        b->render(*this->window);
+        for (auto *b : p->get_pattern())
+        {
+            b->render(*this->window);
+        }
     }
-
     this->window->display();
 
 }

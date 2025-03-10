@@ -44,8 +44,8 @@ private:
         Many objects of these two custom classes will be initialised and both depend on each other
         Thus references of such objects must be passed as parameters in order to reduce risk of memory loss/crashes
     */
-    void init_pattern(BulletPattern* pattern);  
-    void init_bullet(BulletPattern* pattern, Bullet* bullet, const float pos_x, const float pos_y);
+    void init_pattern();  
+    void init_bullet(BulletPattern* pattern, const float pos_x, const float pos_y);
 
 public:
     //Constructors / Destructors
@@ -64,6 +64,7 @@ public:
 
     void update_player();
     void update_bullets();
+    void update_current_sequence();
 
     void update();
     void render();
