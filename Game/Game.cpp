@@ -7,7 +7,7 @@ void Game::init_attributes()
 {
     this->window = nullptr;  //Initialise window pointer
     this->bullets = new BulletPattern();
-    std::cout << this->bullets->peek() << std::endl;
+    this->counter = 0;
 }
 
 void Game::init_window()
@@ -45,14 +45,11 @@ Game::Game()
     this->init_window();
     this->init_player();
     this->init_pattern(this->bullets);
-    std::cout << this->bullets->peek() << std::endl;
 
     //Messy, just testing atm
     this->init_bullet(this->bullets, this->bullet, 0.f, 0.f);
     this->init_bullet(this->bullets, this->bulletTwo, resolution.width - 7.5f, 0.f);
     this->init_bullet(this->bullets, this->bulletThree, 0.f, resolution.height - 7.5f);
-
-    std::cout << this->bullets->peek() << std::endl;
 }
 
 Game::~Game()
@@ -147,10 +144,19 @@ void Game::update_bullets()
     }
 }
 
+void Game::update_current_sequence()
+{
+
+}
+
 void Game::update()
 {
+    //Check for any inputs that will close the window
     this->poll_events();
 
+    //Create the various bullet patterns
+
+    //Updates objects on screen
     this->update_player();
     this->update_bullets();
 
