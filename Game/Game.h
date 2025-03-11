@@ -25,15 +25,12 @@ private:
 
     //Resources
     std::vector<BulletPattern*> bulletSequence; //Holds the current bullet sequence (might make a class for this later, or will make a general queue custom data structure for both patterns and sequences)
-    BulletPattern* bullets;
-
-    //Bullets
-    Bullet* bullet;
-    Bullet* bulletTwo;
-    Bullet* bulletThree;
 
     //Player
     Player* player;  
+
+    //Other attributes
+    int patternDelay;
 
     //Private Methods
     void init_attributes();
@@ -54,6 +51,7 @@ public:
 
     //Accessors
     const bool running() const;
+    const BulletPattern* access_pattern(int position) const;
 
     //Methods
 
@@ -63,7 +61,7 @@ public:
     void spawn_bullet(BulletPattern* pattern, Bullet* bullet, const float pos_x, const float pos_y);
 
     void update_player();
-    void update_bullets();
+    void update_bullets(BulletPattern* pattern);
     void update_current_sequence();
 
     void update();

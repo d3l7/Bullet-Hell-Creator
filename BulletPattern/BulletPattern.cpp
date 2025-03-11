@@ -47,6 +47,11 @@ void BulletPattern::delete_bullet(int position)
     }
 }
 
+void BulletPattern::load_pattern()
+{
+    
+}
+
 bool BulletPattern::is_full() 
 {
     if (this->pattern.size() == maxBullets)

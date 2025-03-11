@@ -6,6 +6,7 @@ using namespace sf;
 void Game::init_attributes()
 {
     this->window = nullptr;  //Initialise window pointer
+    this->patternDelay = 600;
 }
 
 void Game::init_window()
@@ -15,24 +16,28 @@ void Game::init_window()
 
     this->window = new RenderWindow(this->resolution, "Bullet Hell Creator", Style::Titlebar | Style::Close);
 
-    this->window->setFramerateLimit(120);  //Might make this part of user settings later :P
+    this->window->setFramerateLimit(120);  
 }
 
 void Game::init_player() 
 {
-    this->player = new Player();
+    this->player = new Player();  //Initialise player reference
 }
 
 void Game::init_pattern()
 {
-    BulletPattern* pattern = new BulletPattern();
+    //Create an empty pattern and push to current sequence
+    BulletPattern* pattern = new BulletPattern();  
     this->bulletSequence.push_back(pattern);
 }
 
 void Game::init_bullet(BulletPattern* pattern, const float pos_x, const float pos_y)
 {
-   Bullet* bullet = new Bullet();  //This works
+   Bullet* bullet = new Bullet();  
+
+   //Load bullet data
    this->spawn_bullet(pattern, bullet, pos_x, pos_y);
+
    bullet->turn_to_target(this->player->get_pos().x + this->player->get_size(), this->player->get_pos().y + this->player->get_size());
 }
 
@@ -63,14 +68,17 @@ Game::~Game()
 }
 
 //Accessors
-
 const bool Game::running() const
 {
     return this->window->isOpen();
 }
 
-//Methods
+const BulletPattern *Game::access_pattern(int position) const
+{
+    return this->bulletSequence[position];
+}
 
+//Methods
 void Game::poll_events()
 {
     while(this->window->pollEvent(this->ev))
@@ -91,6 +99,7 @@ void Game::poll_events()
 
 void Game::move_player()
 {
+    //WASD controls
     if(Keyboard::isKeyPressed(Keyboard::Key::A) && this->player->get_pos().x > 0)
         this->player->move(-1.f, 0.f);
     if(Keyboard::isKeyPressed(Keyboard::Key::D) && this->player->get_pos().x < (this->window->getSize().x - this->player->get_size())) 
@@ -113,41 +122,46 @@ void Game::update_player()
     this->move_player();
 }
 
-void Game::update_bullets()
+void Game::update_bullets(BulletPattern* pattern)
 {
-    //Access each pattern
-    for (auto *p : this->bulletSequence)
+    unsigned counter = 0;
+    //Access each bullet
+    for (auto *b : pattern->get_pattern())
     {
-        unsigned counter = 0;
-        //Access each bullet
-        for (auto *b : p->get_pattern())
+        b->update();
+
+        //Bullet culling 
+        if((b->outside_window(this->resolution.width, this->resolution.height)))
         {
-            b->update();
+            //Delete individual bullet
+            pattern->delete_bullet(counter);
+            --counter;
+        }else if (pattern->get_pattern()[counter]->get_bounds().intersects(this->player->get_bounds()) && pattern->get_pattern()[counter]->impact_destruction() == true)
+        {
+            //Delete individual bullet
+            pattern->delete_bullet(counter);
+            --counter;
 
-            //Bullet culling 
-            if((b->outside_window(this->resolution.width, this->resolution.height)))
-            {
-                //Delete individual bullet
-                p->delete_bullet(counter);
-                --counter;
-            }else if (p->get_pattern()[counter]->get_bounds().intersects(this->player->get_bounds()) && p->get_pattern()[counter]->impact_destruction() == true)
-            {
-                //Delete individual bullet
-                p->delete_bullet(counter);
-                --counter;
-
-                //Lower health
-                this->player->set_health(-1);  //Mb make a condition attribute to check for this stuff? then can work out other stuff like i frames later :P
-            }
-
-            ++counter;
+            //Lower health
+            this->player->set_health(-1);  //Mb make a condition attribute to check for this stuff? then can work out other stuff like i frames later :P
         }
+
+        ++counter;
     }
 }
 
 void Game::update_current_sequence()
 {
+    int temp = this->patternDelay;
 
+    for (auto *p : this->bulletSequence)
+    {
+        this->update_bullets(p);
+        if(this->bulletSequence.back() == p and temp > 0) 
+        {
+            --temp;
+        }
+    }
 }
 
 void Game::update()
@@ -156,11 +170,10 @@ void Game::update()
     this->poll_events();
 
     //Create the various bullet patterns
+    this->update_current_sequence();
 
     //Updates objects on screen
     this->update_player();
-    this->update_bullets();
-
 }
 
 void Game::render()
@@ -170,6 +183,7 @@ void Game::render()
     //Draw new frame with game objects
     this->player->render(*this->window);
     
+    //Render each bullet, pattern by pattern
     for (auto *p : this->bulletSequence)
     {
         for (auto *b : p->get_pattern())

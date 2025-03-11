@@ -21,6 +21,8 @@ private:
     int maxBullets;
     int bulletFireDelay; 
 
+    int patternSpawnTime;
+
     //Private Methods
     void init_attributes();
 
@@ -35,6 +37,8 @@ public:
     //Methods
     void add_bullet(Bullet* bullet);
     void delete_bullet(int position);
+
+    void load_pattern();
 
     bool is_full();
     bool is_empty();

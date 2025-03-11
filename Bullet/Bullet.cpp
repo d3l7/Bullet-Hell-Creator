@@ -11,7 +11,7 @@ void Bullet::init_attributes()
     this->destroyOnLeavingScreen = true;
     
     this->fireOnSpawn = false;
-    this->timeToFire = 240;
+    this->timeToFire = 180;
     this->speedMultiplier = 2.5f;
 
     //Base speed is 0 since we want to check for fire time first
