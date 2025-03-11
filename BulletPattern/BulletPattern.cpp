@@ -4,7 +4,7 @@
 void BulletPattern::init_attributes()
 {
     this->maxBullets = 25;
-    this->bulletFireDelay = 0;
+    this->bulletFireDelay = 360;
 }
 
 // Constructors / Destructors
@@ -18,11 +18,16 @@ BulletPattern::~BulletPattern()
 
 }
 
-//Accessors
-
+//Getters
 const std::vector<Bullet*> BulletPattern::get_pattern() const
 {
     return this->pattern;
+}
+
+//Setters
+void BulletPattern::set_max_bullets(int max)
+{
+    this->maxBullets = max;
 }
 
 //Methods
@@ -47,9 +52,12 @@ void BulletPattern::delete_bullet(int position)
     }
 }
 
-void BulletPattern::load_pattern()
+void BulletPattern::load_pattern(RenderTarget& target)
 {
-    
+    for (auto *b : this->get_pattern())
+    {
+        b->render(target);
+    }
 }
 
 bool BulletPattern::is_full() 

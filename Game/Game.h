@@ -31,6 +31,7 @@ private:
 
     //Other attributes
     int patternDelay;
+    int baseDelay;
 
     //Private Methods
     void init_attributes();

@@ -6,7 +6,8 @@ using namespace sf;
 void Game::init_attributes()
 {
     this->window = nullptr;  //Initialise window pointer
-    this->patternDelay = 600;
+    this->baseDelay = 600;
+    this->patternDelay = 0;
 }
 
 void Game::init_window()
@@ -48,11 +49,12 @@ Game::Game()
     this->init_window();
     this->init_player();
     this->init_pattern();
+    this->init_pattern();
 
     //Messy, just testing atm
     this->init_bullet(this->bulletSequence[0], 0.f, 0.f);
     this->init_bullet(this->bulletSequence[0], resolution.width - 7.5f, 0.f);
-    this->init_bullet(this->bulletSequence[0], 0.f, resolution.height - 7.5f);
+    this->init_bullet(this->bulletSequence[1], 0.f, resolution.height - 7.5f);
 }
 
 Game::~Game()
@@ -152,16 +154,16 @@ void Game::update_bullets(BulletPattern* pattern)
 
 void Game::update_current_sequence()
 {
-    int temp = this->patternDelay;
-
     for (auto *p : this->bulletSequence)
     {
-        this->update_bullets(p);
-        if(this->bulletSequence.back() == p and temp > 0) 
+        if(this->patternDelay != 0)
         {
-            --temp;
+            --this->patternDelay;
+        }else{
+            this->update_bullets(p);
         }
     }
+
 }
 
 void Game::update()
@@ -186,9 +188,12 @@ void Game::render()
     //Render each bullet, pattern by pattern
     for (auto *p : this->bulletSequence)
     {
-        for (auto *b : p->get_pattern())
+        if(this->patternDelay != 0)
         {
-            b->render(*this->window);
+            --this->patternDelay;
+            std::cout << this->patternDelay << std::endl;
+        }else{
+            p->load_pattern(*this->window);
         }
     }
     this->window->display();

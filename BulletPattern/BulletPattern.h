@@ -21,8 +21,6 @@ private:
     int maxBullets;
     int bulletFireDelay; 
 
-    int patternSpawnTime;
-
     //Private Methods
     void init_attributes();
 
@@ -31,14 +29,17 @@ public:
     BulletPattern();
     ~BulletPattern();
 
-    //Accessors
+    //Getters
     const std::vector<Bullet*> get_pattern() const;
+
+    //Setters
+    void set_max_bullets(int max);
 
     //Methods
     void add_bullet(Bullet* bullet);
     void delete_bullet(int position);
 
-    void load_pattern();
+    void load_pattern(RenderTarget& target);
 
     bool is_full();
     bool is_empty();
