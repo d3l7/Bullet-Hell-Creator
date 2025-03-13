@@ -53,10 +53,8 @@ public:
 
     //Accessors
     const bool running() const;
-    const BulletPattern* access_pattern(int position) const;
 
     //Methods
-
     void poll_events();
     
     void move_player();
@@ -64,7 +62,6 @@ public:
 
     void update_player();
     void update_bullets(BulletPattern* pattern);
-    void update_current_sequence();
 
     void update();
     void render();

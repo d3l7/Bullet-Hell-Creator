@@ -76,11 +76,6 @@ const bool Game::running() const
     return this->window->isOpen();
 }
 
-const BulletPattern *Game::access_pattern(int position) const
-{
-    return this->bulletSequence[position];
-}
-
 //Methods
 void Game::poll_events()
 {
@@ -153,38 +148,21 @@ void Game::update_bullets(BulletPattern* pattern)
     }
 }
 
-void Game::update_current_sequence()
-{
-    for (int i = 0; i < this->bulletSequence.size(); i++)
-    {
-        this->currentPattern = i;   
-        std::cout << this->currentPattern << std::endl;
-        this->update_bullets(this->bulletSequence[this->currentPattern]);
-    }
-    
-
-    /*
-    for (auto *p : this->bulletSequence)
-    {
-        if(this->patternDelay != 0)
-        {
-            --this->patternDelay;
-        }else{
-            this->update_bullets(p);
-            this->patternDelay = this->baseDelay;
-        }
-    }
-    */
-}
-
 void Game::update()
 {
     //Check for any inputs that will close the window
     this->poll_events();
 
     //Create the various bullet patterns
-    this->update_current_sequence();
-
+    if (this->currentPattern <= this->bulletSequence.size() - 1)
+    {
+        this->update_bullets(this->bulletSequence[this->currentPattern]);
+        if (this->bulletSequence[this->currentPattern]->is_empty() && this->currentPattern <= this->bulletSequence.size() - 1)
+        {
+            ++this->currentPattern;   
+            std::cout << "current pattern:" << this->currentPattern << std::endl;
+        }
+    }
     //Updates objects on screen
     this->update_player();
 }
@@ -197,11 +175,13 @@ void Game::render()
     this->player->render(*this->window);
     
     //Render each bullet, pattern by pattern
-    for (auto *b : this->bulletSequence[this->currentPattern]->get_pattern())
+    if (this->currentPattern < this->bulletSequence.size())
     {
-        b->render(*this->window);
+        for (auto *b : this->bulletSequence[this->currentPattern]->get_pattern())
+        {
+            b->render(*this->window);
+        }   
     }
-
     this->window->display();
 
 }

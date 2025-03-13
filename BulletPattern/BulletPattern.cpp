@@ -4,7 +4,7 @@
 void BulletPattern::init_attributes()
 {
     this->maxBullets = 25;
-    this->bulletFireDelay = 360;
+    this->bulletFireDelay = 0;
 }
 
 // Constructors / Destructors
