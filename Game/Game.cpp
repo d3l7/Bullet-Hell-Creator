@@ -8,6 +8,7 @@ void Game::init_attributes()
     this->window = nullptr;  //Initialise window pointer
     this->baseDelay = 600;
     this->patternDelay = 0;
+    this->currentPattern = 0;
 }
 
 void Game::init_window()
@@ -154,6 +155,15 @@ void Game::update_bullets(BulletPattern* pattern)
 
 void Game::update_current_sequence()
 {
+    for (int i = 0; i < this->bulletSequence.size(); i++)
+    {
+        this->currentPattern = i;   
+        std::cout << this->currentPattern << std::endl;
+        this->update_bullets(this->bulletSequence[this->currentPattern]);
+    }
+    
+
+    /*
     for (auto *p : this->bulletSequence)
     {
         if(this->patternDelay != 0)
@@ -161,9 +171,10 @@ void Game::update_current_sequence()
             --this->patternDelay;
         }else{
             this->update_bullets(p);
+            this->patternDelay = this->baseDelay;
         }
     }
-
+    */
 }
 
 void Game::update()
@@ -186,16 +197,11 @@ void Game::render()
     this->player->render(*this->window);
     
     //Render each bullet, pattern by pattern
-    for (auto *p : this->bulletSequence)
+    for (auto *b : this->bulletSequence[this->currentPattern]->get_pattern())
     {
-        if(this->patternDelay != 0)
-        {
-            --this->patternDelay;
-            std::cout << this->patternDelay << std::endl;
-        }else{
-            p->load_pattern(*this->window);
-        }
+        b->render(*this->window);
     }
+
     this->window->display();
 
 }

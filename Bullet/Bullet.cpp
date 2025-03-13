@@ -130,6 +130,7 @@ void Bullet::update()
     if(not this->fireOnSpawn and (this->timeToFire != 0.f))
     {
         --this->timeToFire;
+        std::cout << this->timeToFire << std::endl;
     }else{
         this->fire_bullet();
     }
