@@ -7,10 +7,6 @@ void Bullet::init_attributes()
 {
     this->size = 7.5f;
     
-    this->destroyOnImpact = true;
-    this->destroyOnLeavingScreen = true;
-    
-    this->fireOnSpawn = false;
     this->timeToFire = 180;
     this->speedMultiplier = 2.5f;
 
@@ -77,11 +73,6 @@ const bool Bullet::outside_window(const float bound_x, const float bound_y) cons
     }
 }
 
-const bool Bullet::impact_destruction() const
-{
-    return this->destroyOnImpact;
-}
-
 //Setters
 void Bullet::set_size(const float new_size)
 {
@@ -127,10 +118,9 @@ void Bullet::turn_to_target(const float obj_centre_x, const float obj_centre_y)
 void Bullet::update()
 {
     //Allow for bullet waiting time after spawn
-    if(not this->fireOnSpawn and (this->timeToFire != 0.f))
+    if(this->timeToFire != 0)
     {
         --this->timeToFire;
-        std::cout << this->timeToFire << std::endl;
     }else{
         this->fire_bullet();
     }

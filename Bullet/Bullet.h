@@ -21,7 +21,7 @@ private:
     //Attributes
     RectangleShape hitbox;
 
-    float timeToFire;  //Unique to bullets since we want to fire them in sequence
+    int timeToFire;  //Unique to bullets since we want to fire them in sequence
     float size;
 
     Vector2f velocity;
@@ -29,9 +29,6 @@ private:
     float speedMultiplier;
 
     bool destroyOnImpact;
-    bool destroyOnLeavingScreen;
-    bool fireOnSpawn;
-
 
     //Private Methods
     void init_attributes();
@@ -48,7 +45,6 @@ public:
     const FloatRect get_bounds() const;
     const int get_fire_time() const;
     const bool outside_window(const float bound_x, const float bound_y) const;
-    const bool impact_destruction() const;
 
     //Setters
     void set_size(const float new_size);

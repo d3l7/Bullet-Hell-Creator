@@ -2,7 +2,6 @@
 
 #include "../Player/Player.h"
 #include "../BulletPattern/BulletPattern.h"
-#include <cmath>
 
 using namespace sf;
 
@@ -24,15 +23,26 @@ private:
     Event ev;
 
     //Resources
-    std::vector<BulletPattern*> bulletSequence; //Holds the current bullet sequence (might make a class for this later, or will make a general queue custom data structure for both patterns and sequences)
+    std::vector<BulletPattern*> bulletSequence; //Holds the current bullet sequence
 
     //Player
     Player* player;  
 
+    //Flags
+    bool patternChanged;
+    bool creating;
+    bool testing;
+    bool entered;  //Flag for user inputs during creation
+
     //Other attributes
     int patternDelay;
-    int baseDelay;
-    int currentPattern;
+    int baseDelay;  //Standard delay between patterns, customizable
+
+    //Pointers
+    int currentPattern; 
+    int currentBullet;
+
+    int frameRate;
 
     //Private Methods
     void init_attributes();
@@ -44,7 +54,8 @@ private:
         Thus references of such objects must be passed as parameters in order to reduce risk of memory loss/crashes
     */
     void init_pattern();  
-    void init_bullet(BulletPattern* pattern, const float pos_x, const float pos_y);
+    void init_bullet(BulletPattern* pattern, const float size, const float speed, const int time, 
+                     const float pos_x, const float pos_y, const float target_x, const float target_y);
 
 public:
     //Constructors / Destructors
@@ -53,17 +64,24 @@ public:
 
     //Accessors
     const bool running() const;
+    const bool creating_pattern() const;
+    const bool testing_pattern() const;
 
     //Methods
     void poll_events();
     
+    //Creating
+
+    //Testing
     void move_player();
     void spawn_bullet(BulletPattern* pattern, Bullet* bullet, const float pos_x, const float pos_y);
 
     void update_player();
     void update_bullets(BulletPattern* pattern);
 
-    void update();
+    //Final functions
+    void create();
+    void test();
     void render();
 
 };

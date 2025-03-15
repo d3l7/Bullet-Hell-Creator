@@ -8,12 +8,21 @@ int main()
     Game game;
 
     //Game loop
-
     while(game.running())
     {
-        //Update
-        game.update();
+        game.poll_events();
 
+        //Creating the pattern
+        if (game.creating_pattern())
+        {
+            game.create();
+        }
+
+        //Game updates (when testing)
+        if (game.testing_pattern())
+        {
+            game.test();
+        }
         //Render
         game.render();
     }
