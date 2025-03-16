@@ -2,6 +2,7 @@
 
 #include "../Player/Player.h"
 #include "../BulletPattern/BulletPattern.h"
+#include <string>
 
 using namespace sf;
 
@@ -33,6 +34,7 @@ private:
     bool creating;
     bool testing;
     bool entered;  //Flag for user inputs during creation
+    bool start;
 
     //Other attributes
     int patternDelay;
@@ -71,6 +73,7 @@ public:
     void poll_events();
     
     //Creating
+    void edit_bullet(Bullet* bullet);
 
     //Testing
     void move_player();

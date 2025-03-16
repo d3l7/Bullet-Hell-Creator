@@ -49,6 +49,7 @@ public:
     //Setters
     void set_size(const float new_size);
     void set_speed(const Vector2f new_speed);
+    void set_speed_multiplier(const float new_multiplier);
     void set_fire_time(const int time);
     void set_pos(const float pos_x, const float pos_y);
 

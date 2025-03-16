@@ -39,8 +39,6 @@ public:
     void add_bullet(Bullet* bullet);
     void delete_bullet(int position);
 
-    void load_pattern(RenderTarget& target);
-
     bool is_full();
     bool is_empty();
 

@@ -85,6 +85,11 @@ void Bullet::set_speed(const Vector2f new_speed)
     this->velocity.y = new_speed.y;
 }
 
+void Bullet::set_speed_multiplier(const float new_multiplier)
+{
+    this->speedMultiplier = new_multiplier;
+}
+
 void Bullet::set_fire_time(const int time)
 {
     this->timeToFire = time;

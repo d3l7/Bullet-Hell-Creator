@@ -49,14 +49,8 @@ void BulletPattern::delete_bullet(int position)
     {
         delete this->pattern.at(position);
         this->pattern.erase(this->pattern.begin() + position);
-    }
-}
-
-void BulletPattern::load_pattern(RenderTarget& target)
-{
-    for (auto *b : this->get_pattern())
-    {
-        b->render(target);
+    } else {
+        std::cout << "Pattern is empty" << std::endl;
     }
 }
 
