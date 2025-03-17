@@ -17,6 +17,7 @@ void Game::init_attributes()
     this->testing = false;
     this->entered = false;
     this->start = false;
+    this->sequenceBeat = false;
 }
 
 void Game::init_window()
@@ -101,12 +102,10 @@ void Game::poll_events()
         switch(this->ev.type)
         {
         case Event::Closed:
-            std::cout << "a" << std::endl;
             this->window->close();
             break;
         case Event::KeyPressed:
             if(this->ev.key.code == Keyboard::Escape)
-                std::cout << "b" << std::endl;
                 this->window->close();
             break;
         }
@@ -245,7 +244,7 @@ void Game::update_bullets(BulletPattern* pattern)
 }
 
 //Final functions
-void Game::create()  //que puta mierda es esto chaval
+void Game::create()
 {   
     //User responses
     std::string response;
@@ -329,7 +328,7 @@ void Game::create()  //que puta mierda es esto chaval
         this->currentBullet = 0;
         this->init_pattern();
     } else {
-        std::cout << "Do you wish to edit a pattern? 'Y' for yes, any other input if you would like to move on to test the pattern." << std::endl;
+        std::cout << "Do you wish to edit a pattern? 'Y' for yes, any other input if you would like to move on to test the pattern. (press space to start the pattern in the window)" << std::endl;
         std::cin >> response4;
         if (response4 == 'Y')
         {
@@ -351,9 +350,6 @@ void Game::create()  //que puta mierda es esto chaval
 
 void Game::test()
 {
-    std::vector<BulletPattern*> currentSequence;
-
-    currentSequence = this->bulletSequence;
     //Start testing
     if (not (this->start))
     {
@@ -361,13 +357,16 @@ void Game::test()
         {
             this->start = true;
         }
+    } else if (this->sequenceBeat) {
+        this->testing = false;
     } else {
-        //Create the various bullet patterns
-        std::cout << "f" << std::endl;
-        if (this->currentPattern <= this->bulletSequence.size() - 1)
-        {
+        if (this->player->get_health() <= 0) {
+            std::cout << "Sequence lost, took too much damage" << std::endl;
+            this->sequenceBeat = true;
+        } else if (this->currentPattern < this->bulletSequence.size()){
+            //Create the various bullet patterns
             this->update_bullets(this->bulletSequence[this->currentPattern]);
-            if (this->bulletSequence[this->currentPattern]->is_empty() && this->currentPattern <= this->bulletSequence.size() - 1)
+            if (this->bulletSequence[this->currentPattern]->is_empty() && this->currentPattern < this->bulletSequence.size())
             {
                 if (this->patternDelay != 0)  //If delaying between patterns, run out the delay before next pattern
                 {
@@ -379,11 +378,13 @@ void Game::test()
                 if (patternChanged)  //Reset the delay between patterns
                 {
                     this->patternDelay = this->baseDelay;
-                    this-> patternChanged = false;
+                    this->patternChanged = false;
                 }              
             }
+        } else if (this->currentPattern == this->bulletSequence.size()) {
+            std::cout << "Sequence beat" << std::endl;
+            this->sequenceBeat = true;
         }
-        std::cout << "F" << std::endl;
         //Updates objects on screen
         this->update_player();
     }
@@ -397,16 +398,18 @@ void Game::render()
     this->player->render(*this->window);
     
     //Render each bullet, pattern by pattern
-    if (not (this->bulletSequence[this->currentPattern]->is_empty()))
-    {
-        if (this->currentPattern < this->bulletSequence.size())
+    if (this->currentPattern < this->bulletSequence.size())
+        if (not (this->bulletSequence[this->currentPattern]->is_empty()))
         {
-            for (auto *b : this->bulletSequence[this->currentPattern]->get_pattern())
+            if (this->currentPattern < this->bulletSequence.size())
             {
-                b->render(*this->window);
-            }   
+                for (auto *b : this->bulletSequence[this->currentPattern]->get_pattern())
+                {
+                    b->render(*this->window);
+                }   
+            }
         }
-    }
+
     this->window->display();
 
 }

@@ -35,6 +35,7 @@ private:
     bool testing;
     bool entered;  //Flag for user inputs during creation
     bool start;
+    bool sequenceBeat;
 
     //Other attributes
     int patternDelay;

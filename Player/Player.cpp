@@ -5,7 +5,7 @@ using namespace sf;
 // Private Methods
 void Player::init_attributes()
 {
-    this->health = 5;
+    this->health = 1;
     this->movementSpeed = 3.f;
     this->size = 25.f;
 }
