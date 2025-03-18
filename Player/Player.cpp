@@ -71,7 +71,7 @@ void Player::set_speed(const float new_speed)
 //Methods
 void Player::move(const float dirX, const float dirY)
 {
-    this->hitbox.move(this->movementSpeed * dirX, this->movementSpeed * dirY);  //Only need to then catch inputs of dirX and dirY to manipulate which way the ship goes, can also add multipliers and stuffs :D
+    this->hitbox.move(this->movementSpeed * dirX, this->movementSpeed * dirY);  //Only need to then catch inputs of dirX and dirY to manipulate which way the bullet goes
 }
 
 void Player::update()
