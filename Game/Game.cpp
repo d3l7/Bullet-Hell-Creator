@@ -59,6 +59,7 @@ void Game::init_bullet(BulletPattern* pattern, const float size, const float spe
 //Constructors / Destructors
 Game::Game()
 {
+    //Initialise all single instance objects and attributes
     this->init_attributes();
     this->init_window();
     this->init_player();
@@ -67,6 +68,7 @@ Game::Game()
 
 Game::~Game()
 {
+    //Memory management
     delete this->window;
     delete this->player;
 
@@ -118,6 +120,7 @@ void Game::edit_bullet(Bullet *bullet)
     bool editing = true;
     while (editing)
     {
+        //User inputs
         std::string attribute;
         std::string anotherBullet;
 
@@ -176,17 +179,14 @@ void Game::edit_bullet(Bullet *bullet)
         }
         std::cout << "Would you like to edit another attribute of the bullet? 'Y' for yes, any other input to finish editing." << std::endl;
         std::cin >> anotherBullet;
+        //Update flag
         if (anotherBullet == 'Y')
         {
             editing = true;
         } else {
             editing = false;
         }
-
     }
-
-    this->bulletSequence[currentPattern]->delete_bullet(currentBullet);
-    this->bulletSequence[currentPattern]->add_bullet(bullet);
 }
 
 //Testing
@@ -205,6 +205,7 @@ void Game::move_player()
 
 void Game::spawn_bullet(BulletPattern* pattern, Bullet* bullet, const float pos_x, const float pos_y)
 {
+    //Will arm the bullet ready to fire
     bullet->set_pos(pos_x, pos_y);
     pattern->add_bullet(bullet);
 }
@@ -246,6 +247,15 @@ void Game::update_bullets(BulletPattern* pattern)
 //Final functions
 void Game::create()
 {   
+    /*
+        Handles all of the logic to do with the creation sequence
+
+        -Gathers bullet data which the user has entered
+        -Allows the user the choice of how many bullets they want to add, up to the hard coded maximum
+        -Allows the user the choice of how many patterns they want to add
+        -Allows the user at any point before they test their pattern to edit their patterns, one bullet at a time
+    */
+
     //User responses
     std::string response;
     std::string response2;
@@ -275,7 +285,7 @@ void Game::create()
             std::cout << "Please enter the following bullet data:" << std::endl;
             std::cout << "Size of bullet: " << std::endl;
             std::cin >> bulletSize;
-            std::cout << "Speed of bullet: (base speed is )" << std::endl;
+            std::cout << "Speed of bullet: (base speed is 2.5)" << std::endl;
             std::cin >> bulletSpeed;
             std::cout << "Time for bullet to fire: " << std::endl;
             std::cin >> bulletTime;
@@ -285,6 +295,7 @@ void Game::create()
             std::cin >> bulletYCoordinate;
             std::cout << "Fire at player? (Enter 'Y' for true, any other input for false)" << std::endl;
             std::cin >> response;
+            //Update flag
             if (response == "Y")
             {
                 fireAtPlayer = true;
@@ -298,6 +309,7 @@ void Game::create()
                 std::cout << "Y coordinate of target" << std::endl;
                 std::cin >> targetYCoordinate;
             } else {
+                //Set to start position of player
                 targetXCoordinate = this->player->get_pos().x + this->player->get_size();
                 targetYCoordinate = this->player->get_pos().y + this->player->get_size();
             }
@@ -308,6 +320,7 @@ void Game::create()
                               bulletXCoordinate, bulletYCoordinate, targetXCoordinate, targetYCoordinate);
             std::cout << "Do you wish to add more bullets? Enter 'Y' for yes, any other input for no: " << std::endl;
             std::cin >> response2;
+            //Update flag and increment bullet pointer if 'Y'
             if (response2 == 'Y')
             {
                 this->entered = false;
@@ -321,14 +334,15 @@ void Game::create()
     //Check if the user wishes to continue adding to the sequence
     std::cout << "Do you wish to add another pattern? Enter 'Y' for yes, any other input for no: " << std::endl;
     std::cin >> response3;
+    //Increment pattern pointer if 'Y' and initialise an empty pattern to fill
     if (response3 == 'Y')
     {
         this->entered = false;
         ++this->currentPattern;
         this->currentBullet = 0;
-        this->init_pattern();
+        this->init_pattern(); 
     } else {
-        std::cout << "Do you wish to edit a pattern? 'Y' for yes, any other input if you would like to move on to test the pattern. (press space to start the pattern in the window)" << std::endl;
+        std::cout << "Do you wish to edit a pattern? 'Y' for yes, any other input if you would like to move on to test the pattern." << std::endl;
         std::cin >> response4;
         if (response4 == 'Y')
         {
@@ -340,9 +354,11 @@ void Game::create()
 
             this->edit_bullet(this->bulletSequence[currentPattern]->get_pattern()[currentBullet]);
         } else {
+            //Reset conditions for testing
             this->creating = false;
             this->testing = true;
             this->currentPattern = 0;
+            std::cout << "You have five hits to beat your bullethell. Press space to start, WASD to move." << std::endl;
         }
 
     }
@@ -358,9 +374,10 @@ void Game::test()
             this->start = true;
         }
     } else if (this->sequenceBeat) {
-        this->testing = false;
+        this->testing = false;  //End condition
     } else {
         if (this->player->get_health() <= 0) {
+            //Check the player's health
             std::cout << "Sequence lost, took too much damage" << std::endl;
             this->sequenceBeat = true;
         } else if (this->currentPattern < this->bulletSequence.size()){
@@ -406,7 +423,7 @@ void Game::render()
                 for (auto *b : this->bulletSequence[this->currentPattern]->get_pattern())
                 {
                     b->render(*this->window);
-                }   
+                }    
             }
         }
 

@@ -100,6 +100,7 @@ void Bullet::set_pos(const float pos_x, const float pos_y)
     this->hitbox.setPosition(Vector2f(pos_x, pos_y));
 }
 
+
 // Public Methods
 void Bullet::fire_bullet()
 {
@@ -119,6 +120,7 @@ void Bullet::turn_to_target(const float obj_centre_x, const float obj_centre_y)
     this->tempVelocity = aimDirNorm;
 
 }
+
 
 void Bullet::update()
 {
